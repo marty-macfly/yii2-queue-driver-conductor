@@ -12,7 +12,7 @@
     ],
     "support": {
         "issues": "https://github.com/marty-macfly/yii2-queue-driver-conductor/issues",
-        "source": "https://github.com/marty-macfly/yii2-queue-driver-conductor",
+        "source": "https://github.com/marty-macfly/yii2-queue-driver-conductor"
     },
     "require": {
         "php": ">=5.5.0",

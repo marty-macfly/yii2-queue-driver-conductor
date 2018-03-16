@@ -1,7 +1,30 @@
 Conductor Driver
 ==============
 
-Driver works with [Conductor](https://netflix.github.io/conductor/) [workflow](https://netflix.github.io/conductor/intro/concepts/#workflow-definition) (for push) and [task](https://netflix.github.io/conductor/intro/concepts/#task-definition) (for worker).
+[yiisoft/yii2-queue](https://github.com/yiisoft/yii2-queue) is an extension for running tasks asyncronously via queues.
+
+This package is a new driver to make it works with [netflix/conductor](https://netflix.github.io/conductor/) [workflow](https://netflix.github.io/conductor/intro/concepts/#workflow-definition) (for push) and [task](https://netflix.github.io/conductor/intro/concepts/#task-definition) (for worker).
+
+you'll find example how to use features which are specific to it. For more details see [yii2-queue guide](/yiisoft/yii2-queue/blob/master/docs/guide/README.md).
+
+Installation
+------------
+
+The preferred way to install this extension is through [composer](http://getcomposer.org/download/).
+
+Either run
+
+```
+php composer.phar require --prefer-dist macfly/yii2-queue-driver-conductor
+```
+
+or add
+
+```
+"macfly/yii2-queue-driver-conductor": "*"
+```
+
+to the require section of your `composer.json` file.
 
 Workflow usage
 -------------

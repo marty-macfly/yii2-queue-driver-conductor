@@ -5,7 +5,7 @@ use yii\helpers\Console;
 use yii\queue\cli\Action;
 
 /**
- * Create/Update task defintion on conductor based on the task deintion in the model.
+ * Create/Update task/workflow defintion on conductor based on the task/workflow deintion in the model (see TaskDefBehavior or WorkflowDefBehavior).
  *
  * @author Charles Delfly <charles@delfly.fr>
  */
@@ -17,12 +17,12 @@ class CreateAction extends Action
     public $queue;
 
     /**
-     * Create/Update task defintion on conductor based on the task deintion in the model (see TaskBehavior).
+     * Create/Update task/workflow defintion on conductor based on the task/workflow deintion in the model (see TaskDefBehavior or WorkflowDefBehavior).
      *
      * @return null|int exit code.
      */
-    public function run($model)
+    public function run($modelName)
     {
-        $this->queue->create($model);
+        $this->queue->create($modelName);
     }
 }

@@ -34,6 +34,7 @@ class Command extends CliCommand
     {
         $actions = [];
         if ($this->queue instanceof Workflow) {
+            $actions['create'] = actions\CreateAction::class;
             $actions['remove'] = actions\RemoveAction::class;
             $actions['clear'] = actions\ClearAction::class;
         } elseif ($this->queue instanceof Task) {

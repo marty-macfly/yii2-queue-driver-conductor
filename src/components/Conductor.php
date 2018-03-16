@@ -63,4 +63,44 @@ class Conductor extends Client
                     ->send();
         return $rs->isOk;
     }
+
+    public function getWorkflowDef($workflowDefName)
+    {
+        $rs = $this->get('/api/metadata/workflow/' . urlencode($workflowDefName))->send();
+        if ($rs->statusCode == 200) {
+            return $rs->data;
+        } elseif ($rs->statusCode == 204) {
+            return null;
+        }
+
+        throw new \Exception('Unable to get Workflowdef return: ' . $rs);
+    }
+
+    public function existWorkflowDef($workflowDefName)
+    {
+        return $this->getWorkflowDef($workflowDefName) !== null;
+    }
+
+    public function saveWorkflowDef($workflowDef)
+    {
+        if (($workflowDefName = ArrayHelper::getValue($workflowDef, 'name')) === null) {
+            throw new InvalidArgumentException('WorkflowDef should at least have a "name"');
+        }
+
+        if (($oldDef = $this->getWorkflowdef($workflowDefName)) === null) {
+            $method = 'POST';
+        } else {
+            $method = 'PUT';
+            $workflowDef['createTime'] = ArrayHelper::getValue($oldDef, 'createTime');
+            $workflowDef['createdBy'] = ArrayHelper::getValue($oldDef, 'createdBy');
+            $workflowDef['version'] = ArrayHelper::getValue($oldDef, 'version', 0) + 1;
+        }
+
+        $rs = $this->createRequest()
+                    ->setMethod($method)
+                    ->setUrl('/api/metadata/workflow')
+                    ->setData($workflowDef)
+                    ->send();
+        return $rs->isOk;
+    }
 }

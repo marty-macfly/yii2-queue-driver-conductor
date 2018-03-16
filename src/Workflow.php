@@ -176,4 +176,55 @@ class Workflow extends Queue
 
         return $rs->content;
     }
+
+    public static function isWorkflowDef($workflow)
+    {
+        if ($task instanceof TaskDefInterface) {
+            return true;
+        } elseif ($workflow instanceof Model) {
+            foreach ($workflow->getBehaviors() as $behavior) {
+                if ($behavior instanceof TaskDefInterface) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Create/Update workflow definition on conductor.
+     *
+     * @return null|bool nothing to do (null), success (true) or failure (false).
+     */
+    public static function create($model)
+    {
+        if (class_exists($model)) {
+            $workflow = Yii::createObject($model);
+            if ($this->isTaskDef($workflow)) {
+                $workflowDef = $workflow->def;
+                $user = Yii::$app->has('user') ? Yii::$app->user->isGuest ? 'guest' : Yii::$app->user->identity->has('name') ? Yii::$app->user->identity->name : Yii::$app->user->id : 'unknown';
+                $workflowDef['createdBy'] = $user;
+                $workflowDef['updatedBy'] = $user;
+
+                foreach ($workflowDef['tasks'] as $id => $task) {
+                    if (($name = ArrayHelper::getValue($task, 'taskReferenceName')) !== null && class_exists($name)) {
+                        $task = Yii::createObject($model);
+                        Task::create($name);
+                        $workflowDef['tasks'][$id]['taskReferenceName'] = $task->getName();
+                        $workflowDef['tasks'][$id]['type'] = self::TASK_TYPE_SIMPLE;
+                    }
+                }
+
+                Yii::info(sprintf('Create/Update "%s" workflow definition', $model));
+
+                $conductor = Instance::ensure(self::$conductor, components\Conductor::class);
+                return $conductor->saveWorkflowDef($workflowDef);
+            } else {
+                throw new InvalidParamException(sprintf("Model '%s'doesn't implement TaskDefInterface or doesn't have TaskDefBehavior", $model));
+            }
+        } else {
+            throw new InvalidParamException(sprintf("Model '%s'doesn't exist", $model));
+        }
+        return null;
+    }
 }

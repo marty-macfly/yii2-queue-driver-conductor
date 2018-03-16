@@ -111,7 +111,7 @@ class Task extends Queue
         throw new NotSupportedException('Directly pushing a task is not supported by the driver');
     }
 
-    public function isTaskDef($task)
+    public static function isTaskDef($task)
     {
         if ($task instanceof TaskDefInterface) {
             return true;
@@ -130,21 +130,21 @@ class Task extends Queue
      *
      * @return null|bool nothing to do (null), success (true) or failure (false).
      */
-    public function create($model)
+    public static function create($model)
     {
         if (class_exists($model)) {
             $task = Yii::createObject($model);
-            if ($this->isTaskDef($task)) {
+            if (self::isTaskDef($task)) {
                 $taskDef = $task->def;
                 $user = Yii::$app->has('user') ? Yii::$app->user->isGuest ? 'guest' : Yii::$app->user->identity->has('name') ? Yii::$app->user->identity->name : Yii::$app->user->id : 'unknown';
                 $taskDef['createdBy'] = $user;
                 $taskDef['updatedBy'] = $user;
 
-                Yii::info(sprintf('Create/Update "%s" task defintion', $model));
-
-                return $this->conductor->saveTaskDef($taskDef);
+                Yii::info(sprintf('Create/Update "%s" task definition', $model));
+                $conductor = Instance::ensure(self::$conductor, components\Conductor::class);
+                return $conductor->saveTaskDef($taskDef);
             } else {
-                throw new InvalidParamException(sprintf("Model '%s'doesn't implement TaskDefInterface or doesn't have TaskBehavior", $model));
+                throw new InvalidParamException(sprintf("Model '%s'doesn't implement TaskDefInterface or doesn't have TaskDefBehavior", $model));
             }
         } else {
             throw new InvalidParamException(sprintf("Model '%s'doesn't exist", $model));

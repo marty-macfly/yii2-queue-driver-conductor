@@ -196,7 +196,7 @@ class Workflow extends Queue
      *
      * @return null|bool nothing to do (null), success (true) or failure (false).
      */
-    public static function create($model)
+    public static function create($model, $conductor)
     {
         if (class_exists($model)) {
             $workflow = Yii::createObject($model);
@@ -217,7 +217,6 @@ class Workflow extends Queue
 
                 Yii::info(sprintf('Create/Update "%s" workflow definition', $model));
 
-                $conductor = Instance::ensure(self::$conductor, components\Conductor::class);
                 return $conductor->saveWorkflowDef($workflowDef);
             } else {
                 throw new InvalidParamException(sprintf("Model '%s'doesn't implement TaskDefInterface or doesn't have TaskDefBehavior", $model));

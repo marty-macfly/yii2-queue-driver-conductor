@@ -23,6 +23,6 @@ class CreateAction extends Action
      */
     public function run($modelName)
     {
-        $this->queue->create($modelName);
+        $this->queue->create($modelName, $this->queue->conductor);
     }
 }

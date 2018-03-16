@@ -1,0 +1,28 @@
+{
+    "name": "macfly/yii2-queue-driver-conductor",
+    "description": "Conductor driver for Yii2 Queue Extension which supported DB, Redis, RabbitMQ, Beanstalk and Gearman",
+    "type": "yii2-extension",
+    "keywords": ["yii", "queue", "async", "conductor", "db", "redis", "rabbitmq", "beanstalk", "gearman"],
+    "license": "BSD-3-Clause",
+    "authors": [
+        {
+            "name": "Charles DELFLY",
+            "email": "mmacfly@gmail.com"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/marty-macfly/yii2-queue-driver-conductor/issues",
+        "source": "https://github.com/marty-macfly/yii2-queue-driver-conductor",
+    },
+    "require": {
+        "php": ">=5.5.0",
+        "yiisoft/yii2": "~2.0.13",
+        "yiisoft/yii2-queue": "~2.0.0",
+        "yiisoft/yii2-httpclient": "~2.0.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "yii\\queue\\conductor\\": "src/",
+        }
+    }
+}

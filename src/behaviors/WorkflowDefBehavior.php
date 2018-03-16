@@ -165,11 +165,13 @@ class WorkflowDefBehavior extends Behavior implements WorkflowDefInterface
             'ownerApp' => $this->getOwnerApp(),
             'name' => $this->getName(),
             'description' => $this->description,
-            'tasks' =>  $this->getTasks(),
+            'tasks' =>  $this->tasks,
             'inputParameters' =>  $this->getInputParameters(),
-            'outputParameters' =>  $this->getOutputParameters(),
         ];
 
+        if (!empty($this->getOutputParameters())) {
+            $def['outputParameters'] = $this->getOutputParameters();
+        }
         if ($this->version > 0) {
             $def['version'] = $this->version;
         }

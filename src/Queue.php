@@ -3,6 +3,7 @@ namespace yii\queue\conductor;
 
 use Yii;
 use yii\base\InvalidConfigException;
+use yii\base\Model;
 use yii\di\Instance;
 use yii\queue\cli\Queue as CliQueue;
 use yii\queue\serializers\JsonSerializer;

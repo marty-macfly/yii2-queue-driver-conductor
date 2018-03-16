@@ -4,7 +4,6 @@ namespace yii\queue\conductor;
 use Yii;
 use yii\base\InvalidParamException;
 use yii\base\NotSupportedException;
-use yii\base\Model;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
 use yii\queue\serializers\JsonSerializer;

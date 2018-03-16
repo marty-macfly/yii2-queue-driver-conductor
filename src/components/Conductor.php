@@ -95,13 +95,13 @@ class Conductor extends Client
 
         if (($oldDef = $this->getWorkflowdef($workflowDefName)) === null) {
             $method = 'POST';
-            $data = $taskDef;
+            $data = $workflowDef;
         } else {
             $method = 'PUT';
             $workflowDef['createTime'] = ArrayHelper::getValue($oldDef, 'createTime');
             $workflowDef['createdBy'] = ArrayHelper::getValue($oldDef, 'createdBy');
             $workflowDef['version'] = ArrayHelper::getValue($oldDef, 'version', 0) + 1;
-            $data = [$taskDef];
+            $data = [$workflowDef];
         }
 
         $rs = $this->createRequest()

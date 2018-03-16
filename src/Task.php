@@ -128,9 +128,11 @@ class Task extends Queue
     /**
      * Create/Update task definition on conductor.
      *
+     * @param string $model class name of the model to create/update a defintion.
+     * @param Conductor $conductor componet to use to do request.
      * @return null|bool nothing to do (null), success (true) or failure (false).
      */
-    public static function create($model)
+    public static function create($model, $conductor)
     {
         if (class_exists($model)) {
             $task = Yii::createObject($model);
@@ -141,8 +143,32 @@ class Task extends Queue
                 $taskDef['updatedBy'] = $user;
 
                 Yii::info(sprintf('Create/Update "%s" task definition', $model));
-                $conductor = Instance::ensure(self::$conductor, components\Conductor::class);
                 return $conductor->saveTaskDef($taskDef);
+            } else {
+                throw new InvalidParamException(sprintf("Model '%s'doesn't implement TaskDefInterface or doesn't have TaskDefBehavior", $model));
+            }
+        } else {
+            throw new InvalidParamException(sprintf("Model '%s'doesn't exist", $model));
+        }
+        return null;
+    }
+
+    /**
+     * Delete task definition on conductor.
+     *
+     * @param string $model class name of the model to delete the defintion.
+     * @param Conductor $conductor componet to use to do request.
+     * @return null|bool nothing to do (null), success (true) or failure (false).
+     */
+    public static function delete($model, $conductor)
+    {
+        if (class_exists($model)) {
+            $task = Yii::createObject($model);
+            if (self::isTaskDef($task)) {
+                $taskDef = $task->def;
+
+                Yii::info(sprintf('Delete "%s" task definition', $model));
+                return $conductor->deleteTaskDef($taskDef);
             } else {
                 throw new InvalidParamException(sprintf("Model '%s'doesn't implement TaskDefInterface or doesn't have TaskDefBehavior", $model));
             }

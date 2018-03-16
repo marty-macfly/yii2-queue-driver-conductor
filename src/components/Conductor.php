@@ -40,6 +40,12 @@ class Conductor extends Client
         return $this->getTaskDef($taskDefName) !== null;
     }
 
+    public function deleteTaskDef($taskDefName)
+    {
+        $rs = $this->delete('/api/metadata/taskdefs/' . urlencode($taskDefName))->send();
+        return $rs->isOk;
+    }
+
     public function saveTaskDef($taskDef)
     {
         if (($taskDefName = ArrayHelper::getValue($taskDef, 'name')) === null) {

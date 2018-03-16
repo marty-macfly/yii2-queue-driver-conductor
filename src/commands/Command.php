@@ -39,6 +39,7 @@ class Command extends CliCommand
             $actions['clear'] = actions\ClearAction::class;
         } elseif ($this->queue instanceof Task) {
             $actions['create'] = actions\CreateAction::class;
+            $actions['delete'] = actions\DeleteAction::class;
             $actions['remove'] = actions\RemoveAction::class;
             $actions['clear'] = actions\ClearAction::class;
             $actions['run'] = actions\RunAction::class;

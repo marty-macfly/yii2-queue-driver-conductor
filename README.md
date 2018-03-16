@@ -5,7 +5,7 @@ Conductor Driver
 
 This package is a new driver to make it works with [netflix/conductor](https://netflix.github.io/conductor/) [workflow](https://netflix.github.io/conductor/intro/concepts/#workflow-definition) (for push) and [task](https://netflix.github.io/conductor/intro/concepts/#task-definition) (for worker).
 
-you'll find example how to use features which are specific to it. For more details see [yii2-queue guide](/yiisoft/yii2-queue/blob/master/docs/guide/README.md).
+you'll find example how to use features which are specific to it. For more details see [yii2-queue guide](https://github.com/yiisoft/yii2-queue/blob/master/docs/guide/README.md).
 
 Installation
 ------------

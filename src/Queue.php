@@ -59,7 +59,7 @@ abstract class Queue extends CliQueue
 
     public static function isDefInterface($model)
     {
-        $class = self::class . 'DefInterface';
+        $class = get_called_class() . 'DefInterface';
         if ($model instanceof $class) {
             return true;
         } elseif ($model instanceof Model) {

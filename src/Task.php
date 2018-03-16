@@ -22,10 +22,6 @@ class Task extends Queue
      * @link https://netflix.github.io/conductor/domains/#how-to-use-task-domains
      */
     public $domain = null;
-    /**
-     * @var string job model if not provide in input
-     */
-    public $model;
 
     /**
      * @inheritdoc
@@ -111,20 +107,6 @@ class Task extends Queue
         throw new NotSupportedException('Directly pushing a task is not supported by the driver');
     }
 
-    public static function isTaskDef($task)
-    {
-        if ($task instanceof TaskDefInterface) {
-            return true;
-        } elseif ($task instanceof Model) {
-            foreach ($task->getBehaviors() as $behavior) {
-                if ($behavior instanceof TaskDefInterface) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
     /**
      * Create/Update task definition on conductor.
      *
@@ -136,7 +118,7 @@ class Task extends Queue
     {
         if (class_exists($model)) {
             $task = Yii::createObject($model);
-            if (self::isTaskDef($task)) {
+            if (self::isDefInterface($task)) {
                 $taskDef = $task->def;
                 $user = Yii::$app->has('user') ? Yii::$app->user->isGuest ? 'guest' : Yii::$app->user->identity->has('name') ? Yii::$app->user->identity->name : Yii::$app->user->id : 'unknown';
                 $taskDef['createdBy'] = $user;
@@ -164,7 +146,7 @@ class Task extends Queue
     {
         if (class_exists($model)) {
             $task = Yii::createObject($model);
-            if (self::isTaskDef($task)) {
+            if (self::isDefInterface($task)) {
                 $taskDef = $task->def;
 
                 Yii::info(sprintf('Delete "%s" task definition', $model));

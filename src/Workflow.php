@@ -178,20 +178,6 @@ class Workflow extends Queue
         return $rs->content;
     }
 
-    public static function isWorkflowDef($workflow)
-    {
-        if ($workflow instanceof WorkflowDefInterface) {
-            return true;
-        } elseif ($workflow instanceof Model) {
-            foreach ($workflow->getBehaviors() as $behavior) {
-                if ($behavior instanceof WorkflowDefInterface) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
     /**
      * Create/Update workflow definition on conductor.
      *
@@ -201,7 +187,7 @@ class Workflow extends Queue
     {
         if (class_exists($model)) {
             $workflow = Yii::createObject($model);
-            if (self::isWorkflowDef($workflow)) {
+            if (self::isDefInterface($workflow)) {
                 $workflowDef = $workflow->def;
                 $user = Yii::$app->has('user') ? Yii::$app->user->isGuest ? 'guest' : Yii::$app->user->identity->has('name') ? Yii::$app->user->identity->name : Yii::$app->user->id : 'unknown';
                 $workflowDef['createdBy'] = $user;

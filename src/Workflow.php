@@ -4,6 +4,7 @@ namespace yii\queue\conductor;
 use Yii;
 use yii\base\InvalidParamException;
 use yii\base\NotSupportedException;
+use yii\base\Model;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
 use yii\queue\serializers\JsonSerializer;
@@ -179,11 +180,11 @@ class Workflow extends Queue
 
     public static function isWorkflowDef($workflow)
     {
-        if ($task instanceof TaskDefInterface) {
+        if ($workflow instanceof WorkflowDefInterface) {
             return true;
         } elseif ($workflow instanceof Model) {
             foreach ($workflow->getBehaviors() as $behavior) {
-                if ($behavior instanceof TaskDefInterface) {
+                if ($behavior instanceof WorkflowDefInterface) {
                     return true;
                 }
             }
@@ -200,7 +201,7 @@ class Workflow extends Queue
     {
         if (class_exists($model)) {
             $workflow = Yii::createObject($model);
-            if ($this->isTaskDef($workflow)) {
+            if (self::isWorkflowDef($workflow)) {
                 $workflowDef = $workflow->def;
                 $user = Yii::$app->has('user') ? Yii::$app->user->isGuest ? 'guest' : Yii::$app->user->identity->has('name') ? Yii::$app->user->identity->name : Yii::$app->user->id : 'unknown';
                 $workflowDef['createdBy'] = $user;
@@ -209,9 +210,9 @@ class Workflow extends Queue
                 foreach ($workflowDef['tasks'] as $id => $task) {
                     if (($name = ArrayHelper::getValue($task, 'taskReferenceName')) !== null && class_exists($name)) {
                         $task = Yii::createObject($model);
-                        Task::create($name);
+                        Task::create($name, $conductor);
                         $workflowDef['tasks'][$id]['taskReferenceName'] = $task->getName();
-                        $workflowDef['tasks'][$id]['type'] = self::TASK_TYPE_SIMPLE;
+                        $workflowDef['tasks'][$id]['type'] = WorkflowDefInterface::TASK_TYPE_SIMPLE;
                     }
                 }
 
@@ -219,7 +220,7 @@ class Workflow extends Queue
 
                 return $conductor->saveWorkflowDef($workflowDef);
             } else {
-                throw new InvalidParamException(sprintf("Model '%s'doesn't implement TaskDefInterface or doesn't have TaskDefBehavior", $model));
+                throw new InvalidParamException(sprintf("Model '%s'doesn't implement WorkflowDefInterface or doesn't have WorkflowDefBehavior", $model));
             }
         } else {
             throw new InvalidParamException(sprintf("Model '%s'doesn't exist", $model));

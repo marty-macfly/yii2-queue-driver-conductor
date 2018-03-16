@@ -191,9 +191,9 @@ yii task/run
 yii task/create [model]
 ```
 
-`create` command create/update task definition of the given model. Model need to implement `TaskDefInterface` or has `TaskBehavior` attached.
+`create` command create/update task definition of the given model. Model need to implement `TaskDefInterface` or has `TaskDefBehavior` attached.
 
-Here is model example that support `TaskBehavior`:
+Here is model example that support `TaskDefBehavior`:
 
 ```php
 class TestTask extends \yii\base\Model implements \yii\queue\JobInterface
@@ -205,7 +205,7 @@ class TestTask extends \yii\base\Model implements \yii\queue\JobInterface
     public function behaviors()
     {
         return [
-            \yii\queue\conductor\behaviors\TaskBehavior::className(),
+            \yii\queue\conductor\behaviors\TaskDefBehavior::className(),
         ];
     }
 

@@ -7,22 +7,22 @@ use yii\base\Behavior;
 use yii\queue\conductor\TaskDefInterface;
 
 /**
- * TaskBehavior provide all the attribute needed to define a task definition based on Yii model
+ * TaskDefBehavior provide all the attribute needed to define a task definition based on Yii model
  *
- * To use TaskBehavior, insert the following code to your Model class:
+ * To use TaskDefBehavior, insert the following code to your Model class:
  *
  * ```php
- * use yii\queue\conductor\behaviors\TaskBehavior;
+ * use yii\queue\conductor\behaviors\TaskDefBehavior;
  *
  * public function behaviors()
  * {
  *     return [
- *         TaskBehavior::className(),
+ *         TaskDefBehavior::className(),
  *     ];
  * }
  * ```
  *
- * By default, TaskBehavior will fill the `name` attribute with the model class
+ * By default, TaskDefBehavior will fill the `name` attribute with the model class
  * `ownerApp` will be `Yii::$app->name` and task `inputKeys` will be the model attributes.
  *
  * If want to change the definition attribute, you may configure all the properties like the following:
@@ -33,7 +33,7 @@ use yii\queue\conductor\TaskDefInterface;
  * {
  *     return [
  *         [
- *             'class' => TaskBehavior::className(),
+ *             'class' => TaskDefBehavior::className(),
  *             'timeoutSeconds' => 300,
  *             'inputKeys' => ['attrbute1', 'attribute2'],
  *         ],
@@ -44,7 +44,7 @@ use yii\queue\conductor\TaskDefInterface;
  * @author Charles Delfly <charles@delfly.fr>
  * @link https://netflix.github.io/conductor/metadata/#task-definition
  */
-class TaskBehavior extends Behavior implements TaskDefInterface
+class TaskDefBehavior extends Behavior implements TaskDefInterface
 {
     /**
     * @var string Task unique name
@@ -107,12 +107,28 @@ class TaskBehavior extends Behavior implements TaskDefInterface
     }
 
     /**
+     * Set inputs values.
+     */
+    public function setInputKeys($value)
+    {
+        $this->inputKeys = $value;
+    }
+
+    /**
      * Returns outputs values.
      * @return array outputs name
      */
     public function getOutputKeys()
     {
         return $this->outputKeys;
+    }
+
+    /**
+     * Set outputs values.
+     */
+    public function setOutputKeys($value)
+    {
+        $this->outputKeys = $value;
     }
 
     /**
